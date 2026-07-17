@@ -14,8 +14,8 @@ export default function Footer({ onNavigate }) {
       links: [
         { label: 'About Us', view: 'home' },
         { label: 'Partners', view: 'home' },
-        { label: 'Terms of Service', view: 'home' },
-        { label: 'Privacy Policy', view: 'home' },
+        { label: 'Terms of Service', view: 'terms' },
+        { label: 'Privacy Policy', view: 'privacy' },
       ],
     },
     {

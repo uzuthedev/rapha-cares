@@ -16,6 +16,7 @@ import PsychiatristsPage from './components/PsychiatristsPage';
 import SupportPage from './components/SupportPage';
 import ResourcesPage from './components/ResourcesPage';
 import AdminPage from './components/AdminPage';
+import LegalPage from './components/LegalPage';
 
 export default function App() {
   const [view, setView] = useState('home');
@@ -173,6 +174,10 @@ export default function App() {
         return <SupportPage />;
       case 'resources':
         return <ResourcesPage resources={resources} />;
+      case 'privacy':
+        return <LegalPage type="privacy" onNavigate={handleNavigate} />;
+      case 'terms':
+        return <LegalPage type="terms" onNavigate={handleNavigate} />;
       case 'admin':
         return (
           <AdminPage
