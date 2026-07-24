@@ -1,0 +1,81 @@
+=== THERAPISTS ===
+
+Name: Dr. Sarah Mitchell
+Role: Therapist
+Credentials: PhD, LMFT
+Location: Austin, TX · Telehealth available
+Focus: Anxiety, grief, faith integration
+Price: $140 / session
+Bio: Hi, I'm Dr. Sarah. I walk alongside Christians navigating anxiety and loss, weaving Scripture and evidence-based care into a space where you never have to choose between your faith and your healing.
+Calendly: https://calendly.com/rapha-cares/dr-sarah-mitchell
+Image URL: https://images.unsplash.com/photo-1544005313-94ddf0286df2
+
+Name: Marcus Chen
+Role: Therapist
+Credentials: MA, LPC
+Location: Chicago, IL · In-person & online
+Focus: Depression, burnout, men's ministry
+Price: $120 / session
+Bio: Hi, I'm Marcus. I help men and young adults who feel stuck or ashamed to name what they're carrying—because God's grace meets us in the honest places, not only the polished ones.
+Calendly: https://calendly.com/rapha-cares/marcus-chen
+Image URL: https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d
+
+Name: Elena Vasquez
+Role: Therapist
+Credentials: PsyD, LMHC
+Location: Miami, FL · Bilingual (EN/ES)
+Focus: Trauma, relationships, spiritual abuse recovery
+Price: $155 / session
+Bio: Hi, I'm Elena. My practice is a gentle refuge for those healing from trauma or church hurt, where Christ's compassion and clinical expertise work together at your pace.
+Calendly: https://calendly.com/rapha-cares/elena-vasquez
+Image URL: https://images.unsplash.com/photo-1573496359142-b8d87734a5a2
+
+
+=== PSYCHIATRISTS ===
+
+Name: Dr. James Whitfield
+Role: Psychiatrist
+Credentials: MD, Board-Certified Psychiatrist
+Location: Nashville, TN · Telehealth
+Focus: Medication management, mood disorders
+Price: $250 / initial · $175 follow-up
+Bio: Hi, I'm Dr. Whitfield. I partner with patients and pastors alike to provide thoughtful psychiatric care that honors both your biology and your belief that you are fearfully and wonderfully made.
+Calendly: https://calendly.com/rapha-cares/dr-james-whitfield
+Image URL: https://images.unsplash.com/photo-1622253692010-333f2da6031d
+
+Name: Dr. Amina Okonkwo
+Role: Psychiatrist
+Credentials: DO, Child & Adolescent Psychiatry
+Location: Atlanta, GA · Hybrid
+Focus: ADHD, anxiety in teens, family-centered care
+Price: $275 / initial · $190 follow-up
+Bio: Hi, I'm Dr. Okonkwo. Families come to me when a young person is struggling—I offer medical expertise wrapped in prayerful patience, always including parents in the journey when appropriate.
+Calendly: https://calendly.com/rapha-cares/dr-amina-okonkwo
+Image URL: https://images.unsplash.com/photo-1594824813573-246434de83fb
+
+
+=== RESOURCES ===
+
+Title: The Anxious Christian
+Author: Rhett Smith
+Note: Faith-forward tools for worry and anxious thoughts
+Category: Books
+Link URL: https://www.amazon.com/s?k=The+Anxious+Christian+Rhett+Smith
+
+Title: When Faith Feels Thin
+Author: Tim Keller Archive
+Note: Hope and comfort in seasons of spiritual darkness
+Category: Sermons
+Link URL: https://www.youtube.com/results?search_query=When+Faith+Feels+Thin+Tim+Keller
+
+Title: Peace Be Still
+Author: Lauren Daigle
+Note: Worship for weary, anxious hearts
+Category: Music
+Link URL: https://www.youtube.com/results?search_query=Peace+Be+Still+Lauren+Daigle
+
+Title: Try Softer
+Author: Aundi Kolber
+Note: Gentle, trauma-informed practices for overwhelmed souls
+Category: Books
+Link URL: https://www.amazon.com/s?k=Try+Softer+Aundi+Kolber

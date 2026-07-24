@@ -85,6 +85,7 @@ export default function AdminPage({
     loadPrayers();
   }, [isAuthenticated]);
 
+
   async function handleLogin(e) {
     e.preventDefault();
     setAuthError('');
@@ -174,10 +175,14 @@ export default function AdminPage({
       const payload = { ...providerForm };
 
       if (isSupabaseConfigured()) {
+        const dbPayload = { ...payload };
+        dbPayload.image_url = dbPayload.imageUrl;
+        delete dbPayload.imageUrl;
+
         if (editingProviderId) {
           const { error } = await supabase
             .from('providers')
-            .update(payload)
+            .update(dbPayload)
             .eq('id', editingProviderId);
           if (error) throw error;
 
@@ -194,13 +199,17 @@ export default function AdminPage({
             setPsychiatrists((prev) => prev.filter((p) => p.id !== editingProviderId));
           }
         } else {
-          const { data, error } = await supabase.from('providers').insert([payload]).select();
+          const { data, error } = await supabase.from('providers').insert([dbPayload]).select();
           if (error) throw error;
           if (data && data[0]) {
-            if (data[0].role === 'Psychiatrist') {
-              setPsychiatrists((prev) => [...prev, data[0]]);
+            const returnedProvider = {
+              ...data[0],
+              imageUrl: data[0].image_url,
+            };
+            if (returnedProvider.role === 'Psychiatrist') {
+              setPsychiatrists((prev) => [...prev, returnedProvider]);
             } else {
-              setTherapists((prev) => [...prev, data[0]]);
+              setTherapists((prev) => [...prev, returnedProvider]);
             }
           }
         }
@@ -232,10 +241,14 @@ export default function AdminPage({
       const payload = { ...resourceForm };
 
       if (isSupabaseConfigured()) {
+        const dbPayload = { ...payload };
+        dbPayload.link_url = dbPayload.linkUrl;
+        delete dbPayload.linkUrl;
+
         if (editingResourceId) {
           const { error } = await supabase
             .from('resources')
-            .update(payload)
+            .update(dbPayload)
             .eq('id', editingResourceId);
           if (error) throw error;
 
@@ -243,10 +256,14 @@ export default function AdminPage({
             prev.map((r) => (r.id === editingResourceId ? { ...payload, id: editingResourceId } : r))
           );
         } else {
-          const { data, error } = await supabase.from('resources').insert([payload]).select();
+          const { data, error } = await supabase.from('resources').insert([dbPayload]).select();
           if (error) throw error;
           if (data && data[0]) {
-            setResources((prev) => [...prev, data[0]]);
+            const returnedResource = {
+              ...data[0],
+              linkUrl: data[0].link_url,
+            };
+            setResources((prev) => [...prev, returnedResource]);
           }
         }
       } else {
@@ -419,6 +436,8 @@ export default function AdminPage({
                 : 'Running in local fallback mode.'}
             </p>
           </div>
+
+
           <form onSubmit={handleLogin} className="space-y-4">
             {isSupabaseConfigured() && (
               <div>

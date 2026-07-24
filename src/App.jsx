@@ -61,19 +61,31 @@ export default function App() {
 
         if (provError) throw provError;
 
-        let activeProviders = provData || [];
+        let activeProviders = (provData || []).map((p) => ({
+          ...p,
+          imageUrl: p.image_url,
+        }));
         if (activeProviders.length === 0) {
           // Seed database if empty
           const seed = [
-            ...INITIAL_THERAPISTS.map(({ id, ...p }) => p),
-            ...INITIAL_PSYCHIATRISTS.map(({ id, ...p }) => p),
+            ...INITIAL_THERAPISTS.map(({ id, ...p }) => ({
+              ...p,
+              image_url: p.imageUrl,
+            })),
+            ...INITIAL_PSYCHIATRISTS.map(({ id, ...p }) => ({
+              ...p,
+              image_url: p.imageUrl,
+            })),
           ];
           const { data: inserted, error: seedError } = await supabase
             .from('providers')
             .insert(seed)
             .select();
           if (!seedError && inserted) {
-            activeProviders = inserted;
+            activeProviders = inserted.map((p) => ({
+              ...p,
+              imageUrl: p.image_url,
+            }));
           }
         }
         setTherapists(activeProviders.filter((p) => p.role === 'Therapist'));
@@ -87,15 +99,24 @@ export default function App() {
 
         if (resError) throw resError;
 
-        let activeResources = resData || [];
+        let activeResources = (resData || []).map((r) => ({
+          ...r,
+          linkUrl: r.link_url,
+        }));
         if (activeResources.length === 0) {
-          const seedRes = INITIAL_RESOURCES.map(({ id, ...r }) => r);
+          const seedRes = INITIAL_RESOURCES.map(({ id, ...r }) => ({
+            ...r,
+            link_url: r.linkUrl,
+          }));
           const { data: insertedRes, error: seedResError } = await supabase
             .from('resources')
             .insert(seedRes)
             .select();
           if (!seedResError && insertedRes) {
-            activeResources = insertedRes;
+            activeResources = insertedRes.map((r) => ({
+              ...r,
+              linkUrl: r.link_url,
+            }));
           }
         }
         setResources(activeResources);
