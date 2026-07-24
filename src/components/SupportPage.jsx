@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SectionHeading from './SectionHeading';
 import { supabase, isSupabaseConfigured } from '../utils/supabaseClient';
 
-export default function SupportPage() {
+export default function SupportPage({ onBack }) {
   const [prayerText, setPrayerText] = useState('');
   const [prayerSubmitted, setPrayerSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -67,6 +67,17 @@ export default function SupportPage() {
   return (
     <div className="bg-white px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="group mb-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-rc-terracotta transition-colors hover:text-rc-terracotta-dark"
+          >
+            <span className="transition-transform group-hover:-translate-x-1" aria-hidden="true">
+              ←
+            </span>
+            Back to Home
+          </button>
+        )}
         <SectionHeading
           title="Other Support"
           subtitle="Prayer, presence, and peer connection when you need someone who understands."

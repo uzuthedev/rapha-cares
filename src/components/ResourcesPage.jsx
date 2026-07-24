@@ -7,7 +7,7 @@ function resourceLinkLabel(category) {
   return 'Watch';
 }
 
-export default function ResourcesPage({ resources }) {
+export default function ResourcesPage({ resources, onBack }) {
   const groupedResources = RESOURCE_CATEGORIES.map((cat) => ({
     category: cat,
     items: resources.filter((r) => r.category === cat),
@@ -22,6 +22,17 @@ export default function ResourcesPage({ resources }) {
   return (
     <div className="bg-rc-sand px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="group mb-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-rc-terracotta transition-colors hover:text-rc-terracotta-dark"
+          >
+            <span className="transition-transform group-hover:-translate-x-1" aria-hidden="true">
+              ←
+            </span>
+            Back to Home
+          </button>
+        )}
         <SectionHeading
           title="Media Directory"
           subtitle="Books, sermons, and music curated to nourish your soul on hard days."

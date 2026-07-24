@@ -63,19 +63,6 @@ export default function HomePage({ team, onNavigate }) {
       <section className="bg-white px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <h2 className="mb-10 text-center font-display text-3xl text-rc-terracotta-dark sm:text-4xl">
-            Our Team
-          </h2>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {team.map((member) => (
-              <TeamCard key={member.id} member={member} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-rc-sand px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="mb-10 text-center font-display text-3xl text-rc-terracotta-dark sm:text-4xl">
             Our Services
           </h2>
           <div className="grid gap-6 sm:grid-cols-2">
@@ -92,6 +79,19 @@ export default function HomePage({ team, onNavigate }) {
                 <p className="px-8 pb-8 pt-2 text-stone-600">{service.description}</p>
                 <p className="px-8 pb-6 text-sm font-semibold text-rc-terracotta">Learn more →</p>
               </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-rc-sand px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="mb-10 text-center font-display text-3xl text-rc-terracotta-dark sm:text-4xl">
+            Our Team
+          </h2>
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {team.map((member) => (
+              <TeamCard key={member.id} member={member} />
             ))}
           </div>
         </div>

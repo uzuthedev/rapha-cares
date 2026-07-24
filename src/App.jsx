@@ -188,13 +188,13 @@ export default function App() {
   function renderPage() {
     switch (view) {
       case 'therapy':
-        return <TherapyPage therapists={therapists} onBook={handleBookClick} />;
+        return <TherapyPage therapists={therapists} onBook={handleBookClick} onBack={() => handleNavigate('home')} />;
       case 'psychiatrists':
-        return <PsychiatristsPage psychiatrists={psychiatrists} onBook={handleBookClick} />;
+        return <PsychiatristsPage psychiatrists={psychiatrists} onBook={handleBookClick} onBack={() => handleNavigate('home')} />;
       case 'support':
-        return <SupportPage />;
+        return <SupportPage onBack={() => handleNavigate('home')} />;
       case 'resources':
-        return <ResourcesPage resources={resources} />;
+        return <ResourcesPage resources={resources} onBack={() => handleNavigate('home')} />;
       case 'privacy':
         return <LegalPage type="privacy" onNavigate={handleNavigate} />;
       case 'terms':
