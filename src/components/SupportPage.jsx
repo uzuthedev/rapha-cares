@@ -65,7 +65,7 @@ export default function SupportPage({ onBack }) {
   }
 
   return (
-    <div className="bg-white px-4 py-16 sm:px-6 lg:px-8">
+    <div className="bg-white px-4 py-10 md:py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {onBack && (
           <button
@@ -99,15 +99,15 @@ export default function SupportPage({ onBack }) {
                 required
                 disabled={isSubmitting}
               />
-              <div className="flex flex-wrap items-center gap-4">
-                <button type="submit" className="btn-primary" disabled={isSubmitting}>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <button type="submit" className="btn-primary w-full sm:w-auto text-center justify-center" disabled={isSubmitting}>
                   {isSubmitting ? 'Sending Request...' : 'Submit Prayer Request'}
                 </button>
                 <a
                   href="https://calendly.com/weareraphacares/30min"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold text-rc-terracotta underline decoration-rc-dusty underline-offset-4 transition-colors hover:text-rc-terracotta-dark"
+                  className="text-center sm:text-left text-sm font-semibold text-rc-terracotta underline decoration-rc-dusty underline-offset-4 transition-colors hover:text-rc-terracotta-dark"
                 >
                   Join a live prayer call
                 </a>
@@ -137,7 +137,7 @@ export default function SupportPage({ onBack }) {
                 href="https://calendly.com/weareraphacares/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary inline-flex"
+                className="btn-primary w-full sm:w-auto inline-flex justify-center text-center"
               >
                 Book a peer support call
               </a>

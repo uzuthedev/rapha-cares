@@ -669,7 +669,7 @@ export default function AdminPage({
               required
             />
             <input
-              placeholder="Calendly Link"
+              placeholder="Website or Calendly Link"
               value={providerForm.calendly}
               onChange={(e) => updateProviderForm('calendly', e.target.value)}
               className="input-field sm:col-span-2"

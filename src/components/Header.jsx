@@ -45,9 +45,36 @@ export default function Header({ currentView, onNavigate, onAdminClick }) {
           RAPHA CARES
         </button>
 
+        {/* Desktop Navigation Links */}
+        <nav className="hidden md:flex items-center gap-6" aria-label="Desktop navigation">
+          {NAV_LINKS.map((link) => (
+            <button
+              key={link.id}
+              type="button"
+              onClick={() => handleNav(link.id)}
+              className={`text-sm font-semibold transition-colors hover:text-rc-terracotta-dark ${
+                currentView === link.id
+                  ? 'text-rc-terracotta-dark underline underline-offset-4 decoration-2'
+                  : 'text-stone-905 hover:text-stone-950'
+              }`}
+            >
+              {link.label}
+            </button>
+          ))}
+          <a
+            href="https://form.jotform.com/261897933814068"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-bold text-rc-terracotta hover:text-rc-terracotta-dark transition-colors px-4 py-1.5 rounded-full border-2 border-rc-terracotta hover:border-rc-terracotta-dark"
+          >
+            Join Us
+          </a>
+        </nav>
+
+        {/* Hamburger Menu Toggle Button */}
         <button
           type="button"
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg border border-stone-800/20 bg-white/40"
+          className="flex md:hidden h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg border border-stone-800/20 bg-white/40"
           onClick={() => setMenuOpen((o) => !o)}
           aria-expanded={menuOpen}
           aria-label="Toggle menu"
@@ -65,13 +92,13 @@ export default function Header({ currentView, onNavigate, onAdminClick }) {
       {menuOpen && (
         <>
           <div
-            className="fixed inset-0 top-[72px] z-20 bg-stone-900/30"
+            className="fixed inset-0 top-[72px] z-20 bg-stone-900/30 md:hidden"
             onClick={() => setMenuOpen(false)}
             aria-hidden="true"
           />
           <nav
-            className="relative z-30 border-t border-rc-dusty-dark bg-rc-dusty-light px-4 py-4 shadow-lg"
-            aria-label="Main navigation"
+            className="relative z-30 border-t border-rc-dusty-dark bg-rc-dusty-light px-4 py-4 shadow-lg md:hidden"
+            aria-label="Mobile navigation"
           >
             <ul className="space-y-1">
               {NAV_LINKS.map((link) => (
@@ -89,6 +116,16 @@ export default function Header({ currentView, onNavigate, onAdminClick }) {
                   </button>
                 </li>
               ))}
+              <li className="pt-2">
+                <a
+                  href="https://form.jotform.com/261897933814068"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full rounded-lg px-4 py-3 text-center text-sm font-bold bg-rc-terracotta text-white shadow-sm transition-colors hover:bg-rc-terracotta-dark"
+                >
+                  Join Us
+                </a>
+              </li>
             </ul>
           </nav>
         </>

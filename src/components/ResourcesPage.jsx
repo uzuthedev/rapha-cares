@@ -2,9 +2,8 @@ import { RESOURCE_CATEGORIES } from '../constants';
 import SectionHeading from './SectionHeading';
 
 function resourceLinkLabel(category) {
-  if (category === 'Books') return 'View on Amazon';
-  if (category === 'Music') return 'Listen';
-  return 'Watch';
+  if (category === 'Books') return 'Get';
+  return 'Listen';
 }
 
 export default function ResourcesPage({ resources, onBack }) {
@@ -20,7 +19,7 @@ export default function ResourcesPage({ resources, onBack }) {
   }
 
   return (
-    <div className="bg-rc-sand px-4 py-16 sm:px-6 lg:px-8">
+    <div className="bg-rc-sand px-4 py-10 md:py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {onBack && (
           <button

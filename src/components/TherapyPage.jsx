@@ -31,7 +31,7 @@ function Accordion({ title, children, defaultOpen = false }) {
 
 export default function TherapyPage({ therapists, onBook, onBack }) {
   return (
-    <div className="bg-white px-4 py-16 sm:px-6 lg:px-8">
+    <div className="bg-white px-4 py-10 md:py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {onBack && (
           <button

@@ -3,7 +3,7 @@ import ProviderCard from './ProviderCard';
 
 export default function PsychiatristsPage({ psychiatrists, onBook, onBack }) {
   return (
-    <div className="bg-rc-sand px-4 py-16 sm:px-6 lg:px-8">
+    <div className="bg-rc-sand px-4 py-10 md:py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {onBack && (
           <button

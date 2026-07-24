@@ -9,7 +9,6 @@ import { supabase, isSupabaseConfigured } from './utils/supabaseClient';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SafetyBanner from './components/SafetyBanner';
-import WelcomeModal from './components/WelcomeModal';
 import HomePage from './components/HomePage';
 import TherapyPage from './components/TherapyPage';
 import PsychiatristsPage from './components/PsychiatristsPage';
@@ -20,7 +19,6 @@ import LegalPage from './components/LegalPage';
 
 export default function App() {
   const [view, setView] = useState('home');
-  const [showWelcome, setShowWelcome] = useState(true);
 
   const [therapists, setTherapists] = useState(INITIAL_THERAPISTS);
   const [psychiatrists, setPsychiatrists] = useState(INITIAL_PSYCHIATRISTS);
@@ -227,8 +225,6 @@ export default function App() {
 
       <Footer onNavigate={handleNavigate} />
       <SafetyBanner />
-
-      {showWelcome && <WelcomeModal onContinue={() => setShowWelcome(false)} />}
     </div>
   );
 }
