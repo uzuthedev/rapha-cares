@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS public.team_members (
     name text NOT NULL,
     title text NOT NULL,
     bio text,
+    image_url text,
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

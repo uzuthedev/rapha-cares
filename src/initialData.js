@@ -73,18 +73,21 @@ export const INITIAL_TEAM = [
     name: 'Grace Holloway',
     title: 'Founder & Director',
     bio: 'Grace started Rapha Cares after her own season of anxiety and isolation, believing every believer deserves a safe path to healing.',
+    imageUrl: '',
   },
   {
     id: 102,
     name: 'Pastor David Reyes',
     title: 'Pastoral Care Advisor',
     bio: 'David bridges church communities and clinical care, ensuring spiritual support stays woven into every referral.',
+    imageUrl: '',
   },
   {
     id: 103,
     name: 'Naomi Park',
     title: 'Community & Prayer Lead',
     bio: 'Naomi coordinates prayer requests and peer support, creating spaces where no one walks alone.',
+    imageUrl: '',
   },
 ];
 

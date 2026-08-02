@@ -10,9 +10,17 @@ function TeamCard({ member }) {
   return (
     <article className="section-arch-card overflow-hidden text-center">
       <div className="arch-header">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-2xl font-bold text-rc-terracotta-dark shadow-sm">
-          {initials}
-        </div>
+        {member.imageUrl ? (
+          <img
+            src={member.imageUrl}
+            alt={member.name}
+            className="mx-auto h-20 w-20 rounded-full object-cover shadow-sm bg-white border border-stone-100"
+          />
+        ) : (
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-2xl font-bold text-rc-terracotta-dark shadow-sm">
+            {initials}
+          </div>
+        )}
       </div>
       <div className="px-6 pb-6 pt-2">
         <h3 className="font-display text-lg text-stone-900">{member.name}</h3>

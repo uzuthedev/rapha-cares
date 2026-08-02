@@ -70,6 +70,7 @@ const EMPTY_TEAM_MEMBER = {
   name: '',
   title: '',
   bio: '',
+  imageUrl: '',
 };
 
 export default function AdminPage({
@@ -101,6 +102,56 @@ export default function AdminPage({
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
+
+  const [teamShowUrlInput, setTeamShowUrlInput] = useState(false);
+  const [teamIsUploading, setTeamIsUploading] = useState(false);
+  const [teamUploadError, setTeamUploadError] = useState('');
+  const [teamIsDragging, setTeamIsDragging] = useState(false);
+
+  const processTeamImageFile = async (file) => {
+    if (!file.type.startsWith('image/')) {
+      setTeamUploadError('Please select a valid image file (PNG, JPG, WEBP).');
+      return;
+    }
+    
+    setTeamIsUploading(true);
+    setTeamUploadError('');
+    try {
+      const base64Data = await compressAndResizeImage(file);
+      updateTeamForm('imageUrl', base64Data);
+    } catch (err) {
+      console.error('Error processing image:', err);
+      setTeamUploadError('Failed to process image. Please try again.');
+    } finally {
+      setTeamIsUploading(false);
+    }
+  };
+
+  const handleTeamFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await processTeamImageFile(file);
+    }
+  };
+
+  const handleTeamDragOver = (e) => {
+    e.preventDefault();
+    setTeamIsDragging(true);
+  };
+
+  const handleTeamDragLeave = () => {
+    setTeamIsDragging(false);
+  };
+
+  const handleTeamDrop = async (e) => {
+    e.preventDefault();
+    setTeamIsDragging(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processTeamImageFile(file);
+    }
+  };
 
   const processImageFile = async (file) => {
     if (!file.type.startsWith('image/')) {
@@ -414,10 +465,14 @@ export default function AdminPage({
       const payload = { ...teamForm };
 
       if (isSupabaseConfigured()) {
+        const dbPayload = { ...payload };
+        dbPayload.image_url = dbPayload.imageUrl;
+        delete dbPayload.imageUrl;
+
         if (editingTeamId) {
           const { error } = await supabase
             .from('team_members')
-            .update(payload)
+            .update(dbPayload)
             .eq('id', editingTeamId);
           if (error) throw error;
 
@@ -425,10 +480,10 @@ export default function AdminPage({
             prev.map((t) => (t.id === editingTeamId ? { ...payload, id: editingTeamId } : t))
           );
         } else {
-          const { data, error } = await supabase.from('team_members').insert([payload]).select();
+          const { data, error } = await supabase.from('team_members').insert([dbPayload]).select();
           if (error) throw error;
           if (data && data[0]) {
-            setTeam((prev) => [...prev, data[0]]);
+            setTeam((prev) => [...prev, { ...data[0], imageUrl: data[0].image_url }]);
           }
         }
       } else {
@@ -443,6 +498,8 @@ export default function AdminPage({
 
       setTeamForm(EMPTY_TEAM_MEMBER);
       setEditingTeamId(null);
+      setTeamShowUrlInput(false);
+      setTeamUploadError('');
     } catch (err) {
       console.error('Error saving team member:', err);
       alert('Failed to save team member.');
@@ -485,8 +542,12 @@ export default function AdminPage({
       name: member.name,
       title: member.title,
       bio: member.bio,
+      imageUrl: member.imageUrl || '',
     });
     setEditingTeamId(member.id);
+    const hasExternalUrl = !!member.imageUrl && (member.imageUrl.startsWith('http://') || member.imageUrl.startsWith('https://'));
+    setTeamShowUrlInput(hasExternalUrl);
+    setTeamUploadError('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -691,6 +752,113 @@ export default function AdminPage({
               rows={3}
               required
             />
+            <div className="sm:col-span-2 space-y-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
+                Team Member Photo (optional)
+              </label>
+              
+              {teamForm.imageUrl ? (
+                <div className="flex items-center gap-4 p-4 rounded-xl border border-stone-200 bg-stone-50/50">
+                  <img
+                    src={teamForm.imageUrl}
+                    alt="Preview"
+                    className="h-20 w-20 rounded-full object-cover shadow-sm bg-white border border-stone-100"
+                  />
+                  <div className="space-y-1">
+                    <p className="text-xs text-stone-500 font-medium">Photo selected successfully</p>
+                    <button
+                      type="button"
+                      onClick={() => updateTeamForm('imageUrl', '')}
+                      className="text-xs font-semibold text-red-600 hover:text-red-700 transition-colors"
+                    >
+                      Remove Photo
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <label
+                  htmlFor="team-file-upload"
+                  onDragOver={handleTeamDragOver}
+                  onDragLeave={handleTeamDragLeave}
+                  onDrop={handleTeamDrop}
+                  className={`flex justify-center rounded-xl border-2 border-dashed px-6 py-6 cursor-pointer transition-all duration-300 ${
+                    teamIsDragging
+                      ? 'border-rc-terracotta bg-rc-sand-warm/30'
+                      : 'border-stone-300 bg-white hover:border-rc-dusty hover:bg-stone-50/30'
+                  }`}
+                >
+                  <div className="space-y-2 text-center pointer-events-none">
+                    <div className="flex justify-center">
+                      <svg
+                        className="h-10 w-10 text-stone-400"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div className="text-sm text-stone-600">
+                      <span className="font-semibold text-rc-terracotta hover:text-rc-terracotta-dark">
+                        <span className="md:inline hidden">Upload a photo</span>
+                        <span className="inline md:hidden">Tap to upload a photo</span>
+                      </span>
+                      <span className="pl-1 md:inline hidden">or drag and drop</span>
+                    </div>
+                    <p className="text-xs text-stone-500">PNG, JPG, WEBP (will be resized and compressed)</p>
+                  </div>
+                  <input
+                    id="team-file-upload"
+                    name="team-file-upload"
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleTeamFileChange}
+                    disabled={teamIsUploading}
+                  />
+                </label>
+              )}
+              
+              {teamUploadError && (
+                <p className="text-xs text-red-500 font-medium" role="alert">{teamUploadError}</p>
+              )}
+              
+              <div className="pt-1 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setTeamShowUrlInput(!teamShowUrlInput)}
+                  className="text-xs text-stone-500 hover:text-rc-terracotta font-medium underline underline-offset-2 transition-colors"
+                >
+                  {teamShowUrlInput ? 'Hide image URL option' : 'Or paste a direct image URL link instead'}
+                </button>
+                {teamIsUploading && (
+                  <span className="text-xs text-rc-terracotta font-medium animate-pulse">
+                    Processing image...
+                  </span>
+                )}
+              </div>
+
+              {teamShowUrlInput && (
+                <div className="pt-2 animate-fade-in">
+                  <input
+                    type="url"
+                    placeholder="https://example.com/photo.jpg"
+                    value={teamForm.imageUrl}
+                    onChange={(e) => updateTeamForm('imageUrl', e.target.value)}
+                    className="input-field"
+                  />
+                  <p className="text-xxs text-stone-400 mt-1">
+                    Paste a direct link to an image hosted elsewhere.
+                  </p>
+                </div>
+              )}
+            </div>
             <div className="flex gap-3 sm:col-span-2">
               <button type="submit" className="btn-primary">
                 {editingTeamId ? 'Save Changes' : 'Add Team Member'}
@@ -701,6 +869,8 @@ export default function AdminPage({
                   onClick={() => {
                     setTeamForm(EMPTY_TEAM_MEMBER);
                     setEditingTeamId(null);
+                    setTeamShowUrlInput(false);
+                    setTeamUploadError('');
                   }}
                   className="btn-primary bg-stone-400 hover:text-stone-600 hover:ring-stone-400"
                 >

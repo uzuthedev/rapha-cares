@@ -127,15 +127,26 @@ export default function App() {
 
         if (teamError) throw teamError;
 
-        let activeTeam = teamData || [];
+        let activeTeam = (teamData || []).map((t) => ({
+          ...t,
+          imageUrl: t.image_url,
+        }));
         if (activeTeam.length === 0) {
-          const seedTeam = INITIAL_TEAM.map(({ id, ...t }) => t);
+          const seedTeam = INITIAL_TEAM.map(({ id, ...t }) => {
+            const dbT = { ...t };
+            dbT.image_url = dbT.imageUrl;
+            delete dbT.imageUrl;
+            return dbT;
+          });
           const { data: insertedTeam, error: seedTeamError } = await supabase
             .from('team_members')
             .insert(seedTeam)
             .select();
           if (!seedTeamError && insertedTeam) {
-            activeTeam = insertedTeam;
+            activeTeam = insertedTeam.map((t) => ({
+              ...t,
+              imageUrl: t.image_url,
+            }));
           }
         }
         setTeam(activeTeam);
