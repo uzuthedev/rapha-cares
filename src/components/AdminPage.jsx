@@ -4,6 +4,48 @@ import { genId } from '../initialData';
 import BookingLog from './BookingLog';
 import { supabase, isSupabaseConfigured } from '../utils/supabaseClient';
 
+function compressAndResizeImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_WIDTH = 400;
+        const MAX_HEIGHT = 400;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compress to JPEG with 0.75 quality
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+        resolve(dataUrl);
+      };
+      img.onerror = (err) => reject(err);
+    };
+    reader.onerror = (err) => reject(err);
+  });
+}
+
 const EMPTY_PROVIDER = {
   name: '',
   role: 'Therapist',
@@ -54,6 +96,56 @@ export default function AdminPage({
   const [editingProviderId, setEditingProviderId] = useState(null);
   const [editingResourceId, setEditingResourceId] = useState(null);
   const [editingTeamId, setEditingTeamId] = useState(null);
+
+  const [showUrlInput, setShowUrlInput] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+
+  const processImageFile = async (file) => {
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select a valid image file (PNG, JPG, WEBP).');
+      return;
+    }
+    
+    setIsUploading(true);
+    setUploadError('');
+    try {
+      const base64Data = await compressAndResizeImage(file);
+      updateProviderForm('imageUrl', base64Data);
+    } catch (err) {
+      console.error('Error processing image:', err);
+      setUploadError('Failed to process image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await processImageFile(file);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processImageFile(file);
+    }
+  };
 
   // Check authentication
   const isAuthenticated = isSupabaseConfigured()
@@ -229,6 +321,8 @@ export default function AdminPage({
 
       setProviderForm(EMPTY_PROVIDER);
       setEditingProviderId(null);
+      setShowUrlInput(false);
+      setUploadError('');
     } catch (err) {
       console.error('Error saving provider:', err);
       alert('Failed to save provider. Please verify database permissions and credentials.');
@@ -338,6 +432,9 @@ export default function AdminPage({
       imageUrl: provider.imageUrl || '',
     });
     setEditingProviderId(provider.id);
+    const hasExternalUrl = !!provider.imageUrl && (provider.imageUrl.startsWith('http://') || provider.imageUrl.startsWith('https://'));
+    setShowUrlInput(hasExternalUrl);
+    setUploadError('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -675,12 +772,113 @@ export default function AdminPage({
               className="input-field sm:col-span-2"
               required
             />
-            <input
-              placeholder="Image URL (optional)"
-              value={providerForm.imageUrl}
-              onChange={(e) => updateProviderForm('imageUrl', e.target.value)}
-              className="input-field sm:col-span-2"
-            />
+            <div className="sm:col-span-2 space-y-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
+                Practitioner Photo
+              </label>
+              
+              {providerForm.imageUrl ? (
+                <div className="flex items-center gap-4 p-4 rounded-xl border border-stone-200 bg-stone-50/50">
+                  <img
+                    src={providerForm.imageUrl}
+                    alt="Preview"
+                    className="h-20 w-20 rounded-xl object-cover shadow-sm bg-white border border-stone-100"
+                  />
+                  <div className="space-y-1">
+                    <p className="text-xs text-stone-500 font-medium">Photo selected successfully</p>
+                    <button
+                      type="button"
+                      onClick={() => updateProviderForm('imageUrl', '')}
+                      className="text-xs font-semibold text-red-600 hover:text-red-700 transition-colors"
+                    >
+                      Remove Photo
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <label
+                  htmlFor="file-upload"
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`flex justify-center rounded-xl border-2 border-dashed px-6 py-6 cursor-pointer transition-all duration-300 ${
+                    isDragging
+                      ? 'border-rc-terracotta bg-rc-sand-warm/30'
+                      : 'border-stone-300 bg-white hover:border-rc-dusty hover:bg-stone-50/30'
+                  }`}
+                >
+                  <div className="space-y-2 text-center pointer-events-none">
+                    <div className="flex justify-center">
+                      <svg
+                        className="h-10 w-10 text-stone-400"
+                        stroke="currentColor"
+                        fill="none"
+                        viewBox="0 0 48 48"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
+                    <div className="text-sm text-stone-600">
+                      <span className="font-semibold text-rc-terracotta hover:text-rc-terracotta-dark">
+                        <span className="md:inline hidden">Upload a photo</span>
+                        <span className="inline md:hidden">Tap to upload a photo</span>
+                      </span>
+                      <span className="pl-1 md:inline hidden">or drag and drop</span>
+                    </div>
+                    <p className="text-xs text-stone-500">PNG, JPG, WEBP (will be resized and compressed)</p>
+                  </div>
+                  <input
+                    id="file-upload"
+                    name="file-upload"
+                    type="file"
+                    accept="image/*"
+                    className="sr-only"
+                    onChange={handleFileChange}
+                    disabled={isUploading}
+                  />
+                </label>
+              )}
+              
+              {uploadError && (
+                <p className="text-xs text-red-500 font-medium" role="alert">{uploadError}</p>
+              )}
+              
+              <div className="pt-1 flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => setShowUrlInput(!showUrlInput)}
+                  className="text-xs text-stone-500 hover:text-rc-terracotta font-medium underline underline-offset-2 transition-colors"
+                >
+                  {showUrlInput ? 'Hide image URL option' : 'Or paste a direct image URL link instead'}
+                </button>
+                {isUploading && (
+                  <span className="text-xs text-rc-terracotta font-medium animate-pulse">
+                    Processing image...
+                  </span>
+                )}
+              </div>
+
+              {showUrlInput && (
+                <div className="pt-2 animate-fade-in">
+                  <input
+                    type="url"
+                    placeholder="https://example.com/photo.jpg"
+                    value={providerForm.imageUrl}
+                    onChange={(e) => updateProviderForm('imageUrl', e.target.value)}
+                    className="input-field"
+                  />
+                  <p className="text-xxs text-stone-400 mt-1">
+                    Paste a direct link to an image hosted elsewhere.
+                  </p>
+                </div>
+              )}
+            </div>
             <textarea
               placeholder="Bio"
               value={providerForm.bio}
@@ -699,6 +897,8 @@ export default function AdminPage({
                   onClick={() => {
                     setProviderForm(EMPTY_PROVIDER);
                     setEditingProviderId(null);
+                    setShowUrlInput(false);
+                    setUploadError('');
                   }}
                   className="btn-primary bg-stone-400 hover:text-stone-600 hover:ring-stone-400"
                 >
