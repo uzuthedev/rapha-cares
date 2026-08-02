@@ -177,6 +177,36 @@ export default function AdminPage({
     loadPrayers();
   }, [isAuthenticated]);
 
+  // Automatic logout due to inactivity (15 minutes)
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    let timeoutId;
+    const INACTIVITY_TIMEOUT = 15 * 60 * 1000; // 15 minutes in milliseconds
+
+    const resetTimer = () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        handleLogout();
+        alert('You have been logged out due to inactivity for safety.');
+      }, INACTIVITY_TIMEOUT);
+    };
+
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    
+    events.forEach((event) => {
+      window.addEventListener(event, resetTimer);
+    });
+
+    resetTimer();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+      events.forEach((event) => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, [isAuthenticated]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -545,7 +575,7 @@ export default function AdminPage({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="weareraphacares@gmail.com"
+                  placeholder=""
                   className="input-field"
                   required
                   disabled={isLoading}
