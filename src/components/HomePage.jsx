@@ -102,17 +102,17 @@ export default function HomePage({ team, onNavigate }) {
               <TeamCard key={member.id} member={member} />
             ))}
             {/* Permanent uneditable Join Us card */}
-            <article className="section-arch-card overflow-hidden text-center bg-stone-900 border-stone-850 flex flex-col justify-between h-full shadow-md">
-              <div className="arch-header" style={{ background: 'linear-gradient(to bottom, #2b2824, #1c1917)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/10 font-display text-3xl shadow-sm text-white">
+            <article className="section-arch-card overflow-hidden text-center flex flex-col justify-between h-full">
+              <div className="arch-header">
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-3xl shadow-sm">
                   🤝
                 </div>
               </div>
-              <div className="px-6 pb-8 pt-4 flex-1 flex flex-col justify-between">
+              <div className="px-6 pb-6 pt-2 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-display text-lg text-white font-semibold">Apply to Join Us</h3>
-                  <p className="mt-1 text-xs font-semibold text-rc-dusty uppercase tracking-wider">Join the Mission</p>
-                  <p className="mt-4 text-sm leading-relaxed text-stone-300">
+                  <h3 className="font-display text-lg text-stone-900 font-semibold">Apply to Join Us</h3>
+                  <p className="mt-1 text-sm font-semibold text-rc-terracotta">Join the Mission</p>
+                  <p className="mt-3 text-sm leading-relaxed text-stone-600">
                     Are you passionate about Christian mental health and walking alongside others? You can apply to join us.
                   </p>
                 </div>
