@@ -15,17 +15,17 @@
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-full px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-300 ease-in-out active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
-    background-color: #C4A09A;
+    background-color: #E2576A;
   }
 
   .btn-primary:hover {
     background-color: #ffffff;
-    color: #A8857E;
-    box-shadow: 0 0 0 2px #C4A09A;
+    color: #C54658;
+    box-shadow: 0 0 0 2px #E2576A;
   }
 
   .btn-primary:focus-visible {
-    --tw-ring-color: #A8857E;
+    --tw-ring-color: #C54658;
   }
 
   .btn-primary-sm {
@@ -35,7 +35,7 @@
   .arch-header {
     @apply px-8 pb-6 pt-10;
     border-radius: 50% 50% 0 0 / 18% 18% 0 0;
-    background: linear-gradient(to bottom, #EDE6DC, #ffffff);
+    background: linear-gradient(to bottom, #F3CFD3, #ffffff);
   }
 
   .section-arch-card {
@@ -47,7 +47,7 @@
   }
 
   .input-field:focus {
-    border-color: #C4A09A;
-    --tw-ring-color: rgb(196 160 154 / 0.3);
+    border-color: #E2576A;
+    --tw-ring-color: rgb(226 87 106 / 0.3);
   }
 }

@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { NAV_LINKS } from '../constants';
+import logoImg from '../assets/logo.png';
 
 export default function Header({ currentView, onNavigate, onAdminClick }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,15 +35,19 @@ export default function Header({ currentView, onNavigate, onAdminClick }) {
   }
 
   return (
-    <header className="sticky top-0 z-30 border-b-2 border-rc-dusty-dark bg-rc-dusty shadow-sm">
+    <header className="sticky top-0 z-30 border-b border-stone-100 bg-white shadow-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <button
           type="button"
           onClick={handleLogoClick}
-          className="font-display text-xl font-bold tracking-wide text-stone-900 sm:text-2xl"
+          className="flex items-center"
           aria-label="Rapha Cares home"
         >
-          RAPHA CARES
+          <img
+            src={logoImg}
+            alt="Rapha Cares Logo"
+            className="h-10 w-auto sm:h-12 object-contain"
+          />
         </button>
 
         {/* Desktop Navigation Links */}
