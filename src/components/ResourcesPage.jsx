@@ -1,9 +1,17 @@
+import { ArrowLeft, BookOpen, Mic, Music } from 'lucide-react';
 import { RESOURCE_CATEGORIES } from '../constants';
 import SectionHeading from './SectionHeading';
 
 function resourceLinkLabel(category) {
   if (category === 'Books') return 'Get';
   return 'Listen';
+}
+
+function getCategoryIcon(category) {
+  if (category === 'Books') return <BookOpen className="h-5 w-5 text-rc-terracotta" />;
+  if (category === 'Sermons') return <Mic className="h-5 w-5 text-rc-terracotta" />;
+  if (category === 'Music') return <Music className="h-5 w-5 text-rc-terracotta" />;
+  return null;
 }
 
 export default function ResourcesPage({ resources, onBack }) {
@@ -26,10 +34,8 @@ export default function ResourcesPage({ resources, onBack }) {
             onClick={onBack}
             className="group mb-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-rc-terracotta transition-colors hover:text-rc-terracotta-dark"
           >
-            <span className="transition-transform group-hover:-translate-x-1" aria-hidden="true">
-              ←
-            </span>
-            Back to Home
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Home</span>
           </button>
         )}
         <SectionHeading
@@ -42,8 +48,8 @@ export default function ResourcesPage({ resources, onBack }) {
               items.length > 0 && (
                 <div key={category}>
                   <h3 className="mb-4 flex items-center gap-2 font-display text-xl text-rc-terracotta-dark">
-                    <span className="h-1 w-8 rounded-full bg-rc-dusty" aria-hidden="true" />
-                    {category}
+                    {getCategoryIcon(category)}
+                    <span>{category}</span>
                   </h3>
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((item) => (

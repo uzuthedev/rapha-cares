@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import ProviderCard from './ProviderCard';
 
@@ -10,10 +11,8 @@ export default function PsychiatristsPage({ psychiatrists, onBook, onBack }) {
             onClick={onBack}
             className="group mb-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-rc-terracotta transition-colors hover:text-rc-terracotta-dark"
           >
-            <span className="transition-transform group-hover:-translate-x-1" aria-hidden="true">
-              ←
-            </span>
-            Back to Home
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Home</span>
           </button>
         )}
         <SectionHeading
@@ -32,8 +31,8 @@ export default function PsychiatristsPage({ psychiatrists, onBook, onBack }) {
             <p>
               <strong className="text-stone-800">Typical steps:</strong> (1) Schedule an initial
               consultation, (2) share your history and goals, (3) collaborate on a treatment plan,
-              (4) follow-up visits to monitor progress. A referral from your primary care physician
-              may be required by some insurers—check with the provider when booking.
+              (4) follow up visits to monitor progress. A referral from your primary care physician
+              may be required by some insurers. Check with the provider when booking.
             </p>
           </div>
         </div>

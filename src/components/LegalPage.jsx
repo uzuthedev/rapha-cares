@@ -1,3 +1,4 @@
+import { ArrowLeft } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 
 export default function LegalPage({ type, onNavigate }) {
@@ -18,9 +19,10 @@ export default function LegalPage({ type, onNavigate }) {
           <button
             type="button"
             onClick={() => onNavigate('home')}
-            className="btn-primary bg-stone-100 text-stone-700 hover:bg-stone-200 hover:ring-stone-200"
+            className="btn-primary bg-stone-100 text-stone-700 hover:bg-stone-200 hover:ring-stone-200 inline-flex items-center gap-2"
           >
-            Return Home
+            <ArrowLeft className="h-4 w-4" />
+            <span>Return Home</span>
           </button>
         </div>
 

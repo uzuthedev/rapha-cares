@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import { supabase, isSupabaseConfigured } from '../utils/supabaseClient';
 
@@ -72,10 +73,8 @@ export default function SupportPage({ onBack }) {
             onClick={onBack}
             className="group mb-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-rc-terracotta transition-colors hover:text-rc-terracotta-dark"
           >
-            <span className="transition-transform group-hover:-translate-x-1" aria-hidden="true">
-              ←
-            </span>
-            Back to Home
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Home</span>
           </button>
         )}
         <SectionHeading
@@ -86,7 +85,7 @@ export default function SupportPage({ onBack }) {
           <div className="section-arch-card overflow-hidden p-6">
             <h3 className="mb-2 font-display text-xl text-stone-800">Prayer request</h3>
             <p className="mb-4 text-stone-600">
-              Share what is on your heart. Our team will hold your request in prayer—you are not
+              Share what is on your heart. Our team will hold your request in prayer, you are not
               walking alone.
             </p>
             <form onSubmit={handlePrayerSubmit} className="space-y-4">
@@ -114,7 +113,7 @@ export default function SupportPage({ onBack }) {
               </div>
               {prayerSubmitted && (
                 <p className="text-sm font-medium text-rc-terracotta" role="status">
-                  Thank you. Your request has been received—we are praying with you.
+                  Thank you. Your request has been received, we are praying with you.
                 </p>
               )}
             </form>
@@ -127,11 +126,11 @@ export default function SupportPage({ onBack }) {
             <div className="space-y-4 px-8 pb-8 pt-2">
               <p className="leading-relaxed text-stone-600">
                 Sometimes you need a listening ear more than a clinical appointment. Our peer support
-                volunteers are trained empathetic listeners—fellow believers who offer presence, not
+                volunteers are trained empathetic listeners, fellow believers who offer presence, not
                 professional advice.
               </p>
               <p className="text-sm text-stone-500">
-                Available weekdays · 30-minute calls · Completely confidential
+                Available weekdays · 30 minute calls · Completely confidential
               </p>
               <a
                 href="https://calendly.com/weareraphacares/30min"

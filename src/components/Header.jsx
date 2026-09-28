@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Handshake } from 'lucide-react';
 import { NAV_LINKS } from '../constants';
 import logoImg from '../assets/logo.png';
 
@@ -70,9 +71,10 @@ export default function Header({ currentView, onNavigate, onAdminClick }) {
             href="https://form.jotform.com/261897933814068"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-bold text-rc-terracotta hover:text-rc-terracotta-dark transition-colors px-4 py-1.5 rounded-full border-2 border-rc-terracotta hover:border-rc-terracotta-dark"
+            className="inline-flex items-center gap-2 text-sm font-bold text-rc-terracotta hover:text-rc-terracotta-dark transition-colors px-4 py-1.5 rounded-full border-2 border-rc-terracotta hover:border-rc-terracotta-dark"
           >
-            Join Us
+            <Handshake className="h-4 w-4" />
+            <span>Join Us</span>
           </a>
         </nav>
 
@@ -126,9 +128,10 @@ export default function Header({ currentView, onNavigate, onAdminClick }) {
                   href="https://form.jotform.com/261897933814068"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full rounded-lg px-4 py-3 text-center text-sm font-bold bg-rc-terracotta text-white shadow-sm transition-colors hover:bg-rc-terracotta-dark"
+                  className="inline-flex items-center justify-center gap-2 w-full rounded-lg px-4 py-3 text-center text-sm font-bold bg-rc-terracotta text-white shadow-sm transition-colors hover:bg-rc-terracotta-dark"
                 >
-                  Join Us
+                  <Handshake className="h-5 w-5" />
+                  <span>Join Us</span>
                 </a>
               </li>
             </ul>

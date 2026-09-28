@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import ProviderCard from './ProviderCard';
 
@@ -38,21 +39,19 @@ export default function TherapyPage({ therapists, onBook, onBack }) {
             onClick={onBack}
             className="group mb-6 inline-flex items-center gap-2 font-display text-sm font-semibold text-rc-terracotta transition-colors hover:text-rc-terracotta-dark"
           >
-            <span className="transition-transform group-hover:-translate-x-1" aria-hidden="true">
-              ←
-            </span>
-            Back to Home
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            <span>Back to Home</span>
           </button>
         )}
         <SectionHeading
           title="Christian Therapy"
-          subtitle="Confidential, faith-honoring care for the whole person—mind, body, and spirit."
+          subtitle="Confidential, faith honoring care for the whole person: mind, body, and spirit."
         />
         <Accordion title="What is therapy, and how does faith fit in?" defaultOpen>
           <p>
             Therapy is a confidential space to process emotions, relationships, and life challenges
-            with a trained professional. A Christian therapist integrates evidence-based clinical
-            practices with respect for your faith—prayer when welcomed, Scripture when helpful, and
+            with a trained professional. A Christian therapist integrates evidence based clinical
+            practices with respect for your faith: prayer when welcomed, Scripture when helpful, and
             always your autonomy in how spirituality shows up in your healing journey.
           </p>
           <p className="mt-3">

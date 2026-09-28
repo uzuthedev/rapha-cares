@@ -1,4 +1,6 @@
+import { Handshake } from 'lucide-react';
 import { TAGLINE, SERVICES } from '../constants';
+import TruncatedBio from './TruncatedBio';
 
 function TeamCard({ member }) {
   const initials = member.name
@@ -8,28 +10,31 @@ function TeamCard({ member }) {
     .slice(0, 2);
 
   return (
-    <article className="section-arch-card overflow-hidden text-center">
-      <div className="arch-header">
-        {member.imageUrl ? (
-          <img
-            src={member.imageUrl}
-            alt={member.name}
-            className="mx-auto h-20 w-20 rounded-full object-cover shadow-sm bg-white border border-stone-100"
-          />
-        ) : (
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-2xl font-bold text-rc-terracotta-dark shadow-sm">
-            {initials}
-          </div>
-        )}
-      </div>
-      <div className="px-6 pb-6 pt-2">
-        <h3 className="font-display text-lg text-stone-900">{member.name}</h3>
-        <p className="mt-1 text-sm font-semibold text-rc-terracotta">{member.title}</p>
-        <p className="mt-3 text-sm leading-relaxed text-stone-600">{member.bio}</p>
+    <article className="section-arch-card overflow-hidden text-center flex flex-col justify-between">
+      <div>
+        <div className="arch-header">
+          {member.imageUrl ? (
+            <img
+              src={member.imageUrl}
+              alt={member.name}
+              className="mx-auto h-20 w-20 rounded-full object-cover shadow-sm bg-white border border-stone-100"
+            />
+          ) : (
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-2xl font-bold text-rc-terracotta-dark shadow-sm">
+              {initials}
+            </div>
+          )}
+        </div>
+        <div className="px-5 pb-5 pt-2 sm:px-6 sm:pb-6">
+          <h3 className="font-display text-lg text-stone-900">{member.name}</h3>
+          <p className="mt-1 text-sm font-semibold text-rc-terracotta">{member.title}</p>
+          <TruncatedBio text={member.bio} maxLength={85} className="mt-3" />
+        </div>
       </div>
     </article>
   );
 }
+
 
 export default function HomePage({ team, onNavigate }) {
   return (
@@ -50,14 +55,14 @@ export default function HomePage({ team, onNavigate }) {
             </div>
             <div className="space-y-4 px-8 pb-8 pt-2 leading-relaxed text-stone-600">
               <p>
-                Rapha means &ldquo;healing&rdquo; in Hebrew—and that is the heart behind everything
+                Rapha means &ldquo;healing&rdquo; in Hebrew, and that is the heart behind everything
                 we do. We believe God cares deeply about your mental health, and that faith and
                 professional care can walk hand in hand.
               </p>
               <p>
                 This platform was born from a simple conviction: no one should have to navigate
                 anxiety, depression, or spiritual loneliness alone. We curate trusted Christian
-                therapists, psychiatrists, prayer support, and soul-nourishing resources—all in
+                therapists, psychiatrists, prayer support, and soul-nourishing resources, all in
                 one gentle, welcoming place.
               </p>
               <p className="text-center font-display italic text-rc-terracotta-muted">
@@ -102,17 +107,17 @@ export default function HomePage({ team, onNavigate }) {
               <TeamCard key={member.id} member={member} />
             ))}
             {/* Permanent uneditable Join Us card */}
-            <article className="section-arch-card overflow-hidden text-center flex flex-col justify-between h-full">
-              <div className="arch-header">
-                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white font-display text-3xl shadow-sm">
-                  🤝
+            <article className="section-arch-card overflow-hidden text-center bg-stone-900 border-stone-800 flex flex-col justify-between h-full shadow-md">
+              <div className="arch-header" style={{ background: 'linear-gradient(to bottom, #2b2824, #1c1917)', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/10 shadow-sm text-white">
+                  <Handshake className="h-10 w-10 text-white" />
                 </div>
               </div>
               <div className="px-6 pb-6 pt-2 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-display text-lg text-stone-900 font-semibold">Apply to Join Us</h3>
-                  <p className="mt-1 text-sm font-semibold text-rc-terracotta">Join the Mission</p>
-                  <p className="mt-3 text-sm leading-relaxed text-stone-600">
+                  <h3 className="font-display text-lg text-white font-semibold">Apply to Join Us</h3>
+                  <p className="mt-1 text-sm font-semibold text-rc-dusty">Join the Mission</p>
+                  <p className="mt-3 text-sm leading-relaxed text-stone-300">
                     Are you passionate about Christian mental health and walking alongside others? You can apply to join us.
                   </p>
                 </div>
@@ -121,9 +126,10 @@ export default function HomePage({ team, onNavigate }) {
                     href="https://form.jotform.com/261897933814068"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-primary w-full inline-flex justify-center items-center font-bold tracking-wide transition-colors"
+                    className="btn-primary w-full inline-flex justify-center items-center gap-2 font-bold tracking-wide transition-colors"
                   >
-                    Join Us
+                    <Handshake className="h-5 w-5" />
+                    <span>Join Us</span>
                   </a>
                 </div>
               </div>

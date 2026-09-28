@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { ArrowLeft } from 'lucide-react';
 import { ADMIN_PASS, RESOURCE_CATEGORIES } from '../constants';
 import { genId } from '../initialData';
 import BookingLog from './BookingLog';
@@ -675,9 +676,10 @@ export default function AdminPage({
                 type="button"
                 onClick={onBack}
                 disabled={isLoading}
-                className="btn-primary flex-1 bg-stone-100 text-stone-700 hover:bg-stone-200 hover:ring-stone-200"
+                className="btn-primary flex-1 bg-stone-100 text-stone-700 hover:bg-stone-200 hover:ring-stone-200 inline-flex items-center justify-center gap-2"
               >
-                Back
+                <ArrowLeft className="h-4 w-4" />
+                <span>Back</span>
               </button>
               <button type="submit" disabled={isLoading} className="btn-primary flex-1">
                 {isLoading ? 'Unlocking...' : 'Unlock'}
@@ -706,9 +708,10 @@ export default function AdminPage({
             <button
               type="button"
               onClick={onBack}
-              className="btn-primary bg-stone-100 text-stone-700 hover:bg-stone-200 hover:ring-stone-200"
+              className="btn-primary bg-stone-100 text-stone-700 hover:bg-stone-200 hover:ring-stone-200 inline-flex items-center gap-2"
             >
-              Back to Site
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to Site</span>
             </button>
             <button
               type="button"
