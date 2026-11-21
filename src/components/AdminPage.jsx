@@ -2042,20 +2042,6 @@ export default function AdminPage({
                   />
                 </div>
 
-                {/* Welcome Modal Text */}
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-stone-500 mb-1">
-                    First-Time Welcome Modal Message
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={settingsForm.welcomeText}
-                    onChange={(e) => updateSettingsForm('welcomeText', e.target.value)}
-                    className="input-field"
-                    required
-                  />
-                </div>
-
                 {/* About Us Paragraphs */}
                 <div className="space-y-3">
                   <h3 className="font-display font-semibold text-stone-800 text-sm">

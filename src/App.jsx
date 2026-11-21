@@ -13,7 +13,6 @@ import { supabase, isSupabaseConfigured } from './utils/supabaseClient';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SafetyBanner from './components/SafetyBanner';
-import WelcomeModal from './components/WelcomeModal';
 import HomePage from './components/HomePage';
 import TherapyPage from './components/TherapyPage';
 import PsychiatristsPage from './components/PsychiatristsPage';
@@ -28,11 +27,6 @@ export default function App() {
   // Detect if running on an admin subdomain (e.g. portal.raphacares.org or admin.raphacares.org)
   const host = typeof window !== 'undefined' ? window.location.hostname.toLowerCase() : '';
   const isAdminSubdomain = host.startsWith('portal.') || host.startsWith('admin.');
-
-  // Welcome modal on first visit in a session (only for public site)
-  const [showWelcome, setShowWelcome] = useState(() => {
-    return !sessionStorage.getItem('rapha_welcome_seen');
-  });
 
   // Local storage backed state with initial seed fallbacks
   const [therapists, setTherapists] = useState(() => {
@@ -220,11 +214,6 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function handleDismissWelcome() {
-    setShowWelcome(false);
-    sessionStorage.setItem('rapha_welcome_seen', 'true');
-  }
-
   // Support direct URL access for developer / testing via hash (#admin) or path (/admin)
   useEffect(() => {
     if (window.location.hash === '#admin' || window.location.pathname === '/admin') {
@@ -347,14 +336,6 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#F9F5EF]">
-      {/* Welcome Modal for first time visitors */}
-      {showWelcome && (
-        <WelcomeModal
-          text={siteSettings?.welcomeText}
-          onContinue={handleDismissWelcome}
-        />
-      )}
-
       {/* Safety banner at the very top of the website */}
       <SafetyBanner siteSettings={siteSettings} />
 
