@@ -2,10 +2,8 @@ import { useRef, useState } from 'react';
 import { NAV_LINKS } from '../constants';
 import logoImg from '../assets/logo.png';
 
-export default function Header({ currentView, onNavigate, onAdminClick, siteSettings }) {
+export default function Header({ currentView, onNavigate, siteSettings }) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const logoClickCount = useRef(0);
-  const logoClickTimer = useRef(null);
 
   function handleNav(viewId) {
     setMenuOpen(false);
@@ -14,24 +12,8 @@ export default function Header({ currentView, onNavigate, onAdminClick, siteSett
   }
 
   function handleLogoClick() {
-    logoClickCount.current += 1;
-
-    if (logoClickTimer.current) clearTimeout(logoClickTimer.current);
-
-    if (logoClickCount.current >= 3) {
-      logoClickCount.current = 0;
-      onAdminClick();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-
-    logoClickTimer.current = setTimeout(() => {
-      if (logoClickCount.current === 1) {
-        onNavigate('home');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      logoClickCount.current = 0;
-    }, 500);
+    onNavigate('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   const navItems = [
@@ -76,11 +58,10 @@ export default function Header({ currentView, onNavigate, onAdminClick, siteSett
                   key={link.id}
                   type="button"
                   onClick={() => handleNav(link.id)}
-                  className={`text-sm font-medium transition-colors hover:text-rc-terracotta ${
-                    isActive
-                      ? 'text-rc-forest-dark font-semibold'
-                      : 'text-stone-700'
-                  }`}
+                  className={`text-sm font-medium transition-colors hover:text-rc-terracotta ${isActive
+                    ? 'text-rc-forest-dark font-semibold'
+                    : 'text-stone-700'
+                    }`}
                 >
                   {link.label}
                 </button>
@@ -107,19 +88,16 @@ export default function Header({ currentView, onNavigate, onAdminClick, siteSett
             aria-label="Toggle menu"
           >
             <span
-              className={`block h-0.5 w-5 bg-stone-800 transition-transform ${
-                menuOpen ? 'translate-y-2 rotate-45' : ''
-              }`}
+              className={`block h-0.5 w-5 bg-stone-800 transition-transform ${menuOpen ? 'translate-y-2 rotate-45' : ''
+                }`}
             />
             <span
-              className={`block h-0.5 w-5 bg-stone-800 transition-opacity ${
-                menuOpen ? 'opacity-0' : ''
-              }`}
+              className={`block h-0.5 w-5 bg-stone-800 transition-opacity ${menuOpen ? 'opacity-0' : ''
+                }`}
             />
             <span
-              className={`block h-0.5 w-5 bg-stone-800 transition-transform ${
-                menuOpen ? '-translate-y-2 -rotate-45' : ''
-              }`}
+              className={`block h-0.5 w-5 bg-stone-800 transition-transform ${menuOpen ? '-translate-y-2 -rotate-45' : ''
+                }`}
             />
           </button>
         </div>
@@ -142,11 +120,10 @@ export default function Header({ currentView, onNavigate, onAdminClick, siteSett
                     <button
                       type="button"
                       onClick={() => handleNav(link.id)}
-                      className={`block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium transition-colors ${
-                        currentView === link.id
-                          ? 'bg-white font-semibold text-rc-forest-dark shadow-sm'
-                          : 'text-stone-700 hover:bg-white/60'
-                      }`}
+                      className={`block w-full rounded-xl px-4 py-2.5 text-left text-sm font-medium transition-colors ${currentView === link.id
+                        ? 'bg-white font-semibold text-rc-forest-dark shadow-sm'
+                        : 'text-stone-700 hover:bg-white/60'
+                        }`}
                     >
                       {link.label}
                     </button>

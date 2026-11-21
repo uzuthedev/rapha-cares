@@ -248,15 +248,6 @@ export default function Footer({ onNavigate }) {
                 >
                   Privacy policy
                 </button>
-                <span>·</span>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('admin')}
-                  className="transition-colors hover:text-[#DDA17B] underline decoration-dotted"
-                  title="Founder & Administrator login"
-                >
-                  Founder portal
-                </button>
               </div>
             </div>
           </div>

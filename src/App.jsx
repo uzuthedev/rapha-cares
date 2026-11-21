@@ -25,7 +25,11 @@ import LegalPage from './components/LegalPage';
 export default function App() {
   const [view, setView] = useState('home');
 
-  // Welcome modal on first visit in a session
+  // Detect if running on an admin subdomain (e.g. portal.raphacares.org or admin.raphacares.org)
+  const host = typeof window !== 'undefined' ? window.location.hostname.toLowerCase() : '';
+  const isAdminSubdomain = host.startsWith('portal.') || host.startsWith('admin.');
+
+  // Welcome modal on first visit in a session (only for public site)
   const [showWelcome, setShowWelcome] = useState(() => {
     return !sessionStorage.getItem('rapha_welcome_seen');
   });
@@ -221,8 +225,9 @@ export default function App() {
     sessionStorage.setItem('rapha_welcome_seen', 'true');
   }
 
+  // Support direct URL access for developer / testing via hash (#admin) or path (/admin)
   useEffect(() => {
-    if (window.location.hash === '#admin') {
+    if (window.location.hash === '#admin' || window.location.pathname === '/admin') {
       setView('admin');
     }
 
@@ -230,19 +235,9 @@ export default function App() {
       if (window.location.hash === '#admin') setView('admin');
     }
 
-    function onKeyDown(e) {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
-        e.preventDefault();
-        setView('admin');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }
-
     window.addEventListener('hashchange', onHashChange);
-    window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('hashchange', onHashChange);
-      window.removeEventListener('keydown', onKeyDown);
     };
   }, []);
 
@@ -252,6 +247,37 @@ export default function App() {
     }
   }
 
+  // ===================== DEDICATED SUBDOMAIN MODE =====================
+  // When visiting on an admin subdomain (e.g. admin.raphacares.com),
+  // render the Admin Portal exclusively with direct redirect back to main site.
+  if (isAdminSubdomain) {
+    return (
+      <div className="min-h-screen bg-[#F9F5EF]">
+        <AdminPage
+          therapists={therapists}
+          psychiatrists={psychiatrists}
+          resources={resources}
+          team={team}
+          categories={categories}
+          siteSettings={siteSettings}
+          setTherapists={setTherapists}
+          setPsychiatrists={setPsychiatrists}
+          setResources={setResources}
+          setTeam={setTeam}
+          setCategories={setCategories}
+          setSiteSettings={setSiteSettings}
+          session={session}
+          onBack={() => {
+            const mainHost = window.location.hostname.replace(/^(portal|admin)\./i, '');
+            const port = window.location.port ? `:${window.location.port}` : '';
+            window.location.href = `${window.location.protocol}//${mainHost}${port}`;
+          }}
+        />
+      </div>
+    );
+  }
+
+  // ===================== MAIN PUBLIC SITE MODE =====================
   function renderPage() {
     switch (view) {
       case 'therapy':
@@ -329,19 +355,19 @@ export default function App() {
         />
       )}
 
-      {/* Safety banner at the very top of the website, exactly as designed in Figma */}
+      {/* Safety banner at the very top of the website */}
       <SafetyBanner siteSettings={siteSettings} />
 
-      {/* Header navigation bar directly below */}
+      {/* Clean Header navbar (no secret clicks or admin triggers) */}
       <Header
         currentView={view}
         onNavigate={handleNavigate}
-        onAdminClick={() => handleNavigate('admin')}
         siteSettings={siteSettings}
       />
 
       <main className="flex-1">{renderPage()}</main>
 
+      {/* Clean Footer (no founder portal link) */}
       <Footer onNavigate={handleNavigate} />
     </div>
   );
