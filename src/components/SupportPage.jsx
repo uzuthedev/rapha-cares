@@ -3,10 +3,13 @@ import { ArrowLeft } from 'lucide-react';
 import SectionHeading from './SectionHeading';
 import { supabase, isSupabaseConfigured } from '../utils/supabaseClient';
 
-export default function SupportPage({ onBack }) {
+export default function SupportPage({ onBack, siteSettings }) {
   const [prayerText, setPrayerText] = useState('');
   const [prayerSubmitted, setPrayerSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const prayerCallUrl = siteSettings?.prayerCallUrl || 'https://calendly.com/weareraphacares/30min';
+  const peerSupportUrl = siteSettings?.peerSupportUrl || 'https://calendly.com/weareraphacares/30min';
 
   async function handlePrayerSubmit(e) {
     e.preventDefault();
@@ -15,14 +18,12 @@ export default function SupportPage({ onBack }) {
     setIsSubmitting(true);
 
     try {
-      // 1. Save to Supabase (if configured) or fallback to local storage
       if (isSupabaseConfigured()) {
         const { error } = await supabase
           .from('prayer_requests')
           .insert([{ content: prayerText.trim() }]);
         if (error) throw error;
       } else {
-        // Fallback to local storage so admin page can still show it in dev mode if Supabase is offline
         const localRequests = JSON.parse(
           localStorage.getItem('rapha-cares-local-prayers') || '[]'
         );
@@ -34,7 +35,6 @@ export default function SupportPage({ onBack }) {
         localStorage.setItem('rapha-cares-local-prayers', JSON.stringify(localRequests));
       }
 
-      // 2. Send email via Web3Forms (if access key is configured)
       const web3Key = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
       if (web3Key) {
         await fetch('https://api.web3forms.com/submit', {
@@ -66,7 +66,7 @@ export default function SupportPage({ onBack }) {
   }
 
   return (
-    <div className="bg-white px-4 py-10 md:py-16 sm:px-6 lg:px-8">
+    <div className="bg-[#F9F5EF] px-4 py-10 md:py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         {onBack && (
           <button
@@ -99,11 +99,15 @@ export default function SupportPage({ onBack }) {
                 disabled={isSubmitting}
               />
               <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                <button type="submit" className="btn-primary w-full sm:w-auto text-center justify-center" disabled={isSubmitting}>
+                <button
+                  type="submit"
+                  className="btn-primary w-full sm:w-auto text-center justify-center"
+                  disabled={isSubmitting}
+                >
                   {isSubmitting ? 'Sending Request...' : 'Submit Prayer Request'}
                 </button>
                 <a
-                  href="https://calendly.com/weareraphacares/30min"
+                  href={prayerCallUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-center sm:text-left text-sm font-semibold text-rc-terracotta underline decoration-rc-dusty underline-offset-4 transition-colors hover:text-rc-terracotta-dark"
@@ -133,7 +137,7 @@ export default function SupportPage({ onBack }) {
                 Available weekdays · 30 minute calls · Completely confidential
               </p>
               <a
-                href="https://calendly.com/weareraphacares/30min"
+                href={peerSupportUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary w-full sm:w-auto inline-flex justify-center text-center"
@@ -147,4 +151,3 @@ export default function SupportPage({ onBack }) {
     </div>
   );
 }
-

@@ -4,39 +4,33 @@ export default {
   theme: {
     extend: {
       colors: {
-        'rc-dusty': '#936F55',
-        'rc-dusty-light': '#B89982',
-        'rc-dusty-dark': '#75553F',
-        'rc-terracotta': '#E2576A',
-        'rc-terracotta-dark': '#C54658',
-        'rc-terracotta-muted': '#E67E8C',
-        'rc-sand': '#FAE2E5',
-        'rc-sand-warm': '#F3CFD3',
+        'rc-sand': '#F9F5EF',
+        'rc-sand-warm': '#EBE3D7',
+        'rc-sand-light': '#FDFBF7',
+        'rc-terracotta': '#A5553F',
+        'rc-terracotta-dark': '#8C4532',
+        'rc-terracotta-muted': '#C47D68',
+        'rc-forest': '#304F43',
+        'rc-forest-dark': '#1E2B25',
+        'rc-muted': '#5A655F',
+        'rc-dusty': '#C5B5A3',
+        'rc-dusty-dark': '#8E7B68',
       },
       fontFamily: {
-        display: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
+        display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: [
+          '"Plus Jakarta Sans"',
           'system-ui',
           '-apple-system',
           'Segoe UI',
           'Roboto',
-          'Helvetica Neue',
-          'Arial',
           'sans-serif',
         ],
       },
       borderRadius: {
         arch: '50% 50% 0 0 / 12% 12% 0 0',
         'arch-lg': '50% 50% 0 0 / 18% 18% 0 0',
-      },
-      animation: {
-        'scroll-cards': 'scrollCards 18s linear infinite',
-      },
-      keyframes: {
-        scrollCards: {
-          '0%': { transform: 'translateY(0)' },
-          '100%': { transform: 'translateY(-50%)' },
-        },
       },
     },
   },

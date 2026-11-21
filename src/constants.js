@@ -16,6 +16,34 @@ export const NAV_LINKS = [
 
 export const RESOURCE_CATEGORIES = ['Books', 'Sermons', 'Music'];
 
+export const DEFAULT_RESOURCE_CATEGORIES = [
+  'Books',
+  'Sermons',
+  'Music',
+  'Podcasts',
+  'Articles',
+  'Workbooks',
+  'Mobile Apps',
+  'Crisis Lines',
+];
+
+export const INITIAL_SITE_SETTINGS = {
+  tagline: TAGLINE,
+  welcomeText: WELCOME_TEXT,
+  announcementText: '',
+  announcementActive: false,
+  aboutTitle: 'About Rapha Cares',
+  aboutP1:
+    'Rapha means "healing" in Hebrew, and that is the heart behind everything we do. We believe God cares deeply about your mental health, and that faith and professional care can walk hand in hand.',
+  aboutP2:
+    'This platform was born from a simple conviction: no one should have to navigate anxiety, depression, or spiritual loneliness alone. We curate trusted Christian therapists, psychiatrists, prayer support, and soul-nourishing resources, all in one gentle, welcoming place.',
+  aboutHighlight: 'You are seen. You are loved. You belong here.',
+  prayerCallUrl: 'https://calendly.com/weareraphacares/30min',
+  peerSupportUrl: 'https://calendly.com/weareraphacares/30min',
+  safetyNotice:
+    'This website is a resource directory, not a crisis line. If you are experiencing a mental health emergency, please dial 988 immediately.',
+};
+
 export const SERVICES = [
   {
     id: 'therapy',

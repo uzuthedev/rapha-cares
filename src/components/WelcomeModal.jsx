@@ -1,9 +1,9 @@
 import { WELCOME_TEXT } from '../constants';
 
-export default function WelcomeModal({ onContinue }) {
+export default function WelcomeModal({ text, onContinue }) {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 p-4 backdrop-blur-sm animate-fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="welcome-title"
@@ -19,7 +19,7 @@ export default function WelcomeModal({ onContinue }) {
             Welcome to Rapha Cares
           </h2>
           <p className="text-center text-base leading-relaxed text-stone-600 md:text-lg">
-            {WELCOME_TEXT}
+            {text || WELCOME_TEXT}
           </p>
           <div className="mt-8 flex justify-center">
             <button type="button" onClick={onContinue} className="btn-primary">

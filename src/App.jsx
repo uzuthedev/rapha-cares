@@ -5,10 +5,15 @@ import {
   INITIAL_RESOURCES,
   INITIAL_TEAM,
 } from './initialData';
+import {
+  DEFAULT_RESOURCE_CATEGORIES,
+  INITIAL_SITE_SETTINGS,
+} from './constants';
 import { supabase, isSupabaseConfigured } from './utils/supabaseClient';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import SafetyBanner from './components/SafetyBanner';
+import WelcomeModal from './components/WelcomeModal';
 import HomePage from './components/HomePage';
 import TherapyPage from './components/TherapyPage';
 import PsychiatristsPage from './components/PsychiatristsPage';
@@ -20,10 +25,44 @@ import LegalPage from './components/LegalPage';
 export default function App() {
   const [view, setView] = useState('home');
 
-  const [therapists, setTherapists] = useState(INITIAL_THERAPISTS);
-  const [psychiatrists, setPsychiatrists] = useState(INITIAL_PSYCHIATRISTS);
-  const [resources, setResources] = useState(INITIAL_RESOURCES);
-  const [team, setTeam] = useState(INITIAL_TEAM);
+  // Welcome modal on first visit in a session
+  const [showWelcome, setShowWelcome] = useState(() => {
+    return !sessionStorage.getItem('rapha_welcome_seen');
+  });
+
+  // Local storage backed state with initial seed fallbacks
+  const [therapists, setTherapists] = useState(() => {
+    const local = localStorage.getItem('rapha-cares-therapists');
+    return local ? JSON.parse(local) : INITIAL_THERAPISTS;
+  });
+
+  const [psychiatrists, setPsychiatrists] = useState(() => {
+    const local = localStorage.getItem('rapha-cares-psychiatrists');
+    return local ? JSON.parse(local) : INITIAL_PSYCHIATRISTS;
+  });
+
+  const [resources, setResources] = useState(() => {
+    const local = localStorage.getItem('rapha-cares-resources');
+    return local ? JSON.parse(local) : INITIAL_RESOURCES;
+  });
+
+  const [team, setTeam] = useState(() => {
+    const local = localStorage.getItem('rapha-cares-team');
+    return local ? JSON.parse(local) : INITIAL_TEAM;
+  });
+
+  const [categories, setCategories] = useState(() => {
+    const local = localStorage.getItem('rapha-cares-categories');
+    return local ? JSON.parse(local) : DEFAULT_RESOURCE_CATEGORIES;
+  });
+
+  const [siteSettings, setSiteSettings] = useState(() => {
+    const local = localStorage.getItem('rapha-cares-settings');
+    return local
+      ? { ...INITIAL_SITE_SETTINGS, ...JSON.parse(local) }
+      : INITIAL_SITE_SETTINGS;
+  });
+
   const [session, setSession] = useState(null);
 
   // Monitor Supabase auth session
@@ -43,7 +82,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Fetch and seed data on initial load
+  // Fetch and seed data on initial load if Supabase is active
   useEffect(() => {
     if (!isSupabaseConfigured()) {
       return;
@@ -63,8 +102,8 @@ export default function App() {
           ...p,
           imageUrl: p.image_url,
         }));
+
         if (activeProviders.length === 0) {
-          // Seed database if empty
           const seed = [
             ...INITIAL_THERAPISTS.map(({ id, ...p }) => ({
               ...p,
@@ -86,8 +125,12 @@ export default function App() {
             }));
           }
         }
-        setTherapists(activeProviders.filter((p) => p.role === 'Therapist'));
-        setPsychiatrists(activeProviders.filter((p) => p.role === 'Psychiatrist'));
+        const activeTherapists = activeProviders.filter((p) => p.role === 'Therapist');
+        const activePsychiatrists = activeProviders.filter((p) => p.role === 'Psychiatrist');
+        setTherapists(activeTherapists);
+        setPsychiatrists(activePsychiatrists);
+        localStorage.setItem('rapha-cares-therapists', JSON.stringify(activeTherapists));
+        localStorage.setItem('rapha-cares-psychiatrists', JSON.stringify(activePsychiatrists));
 
         // 2. Fetch Resources
         const { data: resData, error: resError } = await supabase
@@ -100,7 +143,11 @@ export default function App() {
         let activeResources = (resData || []).map((r) => ({
           ...r,
           linkUrl: r.link_url,
+          imageUrl: r.image_url,
+          buttonLabel: r.button_label,
+          badge: r.badge,
         }));
+
         if (activeResources.length === 0) {
           const seedRes = INITIAL_RESOURCES.map(({ id, ...r }) => ({
             ...r,
@@ -114,10 +161,14 @@ export default function App() {
             activeResources = insertedRes.map((r) => ({
               ...r,
               linkUrl: r.link_url,
+              imageUrl: r.image_url,
+              buttonLabel: r.button_label,
+              badge: r.badge,
             }));
           }
         }
         setResources(activeResources);
+        localStorage.setItem('rapha-cares-resources', JSON.stringify(activeResources));
 
         // 3. Fetch Team Members
         const { data: teamData, error: teamError } = await supabase
@@ -131,6 +182,7 @@ export default function App() {
           ...t,
           imageUrl: t.image_url,
         }));
+
         if (activeTeam.length === 0) {
           const seedTeam = INITIAL_TEAM.map(({ id, ...t }) => {
             const dbT = { ...t };
@@ -150,8 +202,9 @@ export default function App() {
           }
         }
         setTeam(activeTeam);
+        localStorage.setItem('rapha-cares-team', JSON.stringify(activeTeam));
       } catch (err) {
-        console.error('Error fetching data from Supabase, using initial defaults:', err);
+        console.error('Error fetching data from Supabase, using local state defaults:', err);
       }
     }
 
@@ -161,6 +214,11 @@ export default function App() {
   function handleNavigate(page) {
     setView(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleDismissWelcome() {
+    setShowWelcome(false);
+    sessionStorage.setItem('rapha_welcome_seen', 'true');
   }
 
   useEffect(() => {
@@ -197,13 +255,36 @@ export default function App() {
   function renderPage() {
     switch (view) {
       case 'therapy':
-        return <TherapyPage therapists={therapists} onBook={handleBookClick} onBack={() => handleNavigate('home')} />;
+        return (
+          <TherapyPage
+            therapists={therapists}
+            onBook={handleBookClick}
+            onBack={() => handleNavigate('home')}
+          />
+        );
       case 'psychiatrists':
-        return <PsychiatristsPage psychiatrists={psychiatrists} onBook={handleBookClick} onBack={() => handleNavigate('home')} />;
+        return (
+          <PsychiatristsPage
+            psychiatrists={psychiatrists}
+            onBook={handleBookClick}
+            onBack={() => handleNavigate('home')}
+          />
+        );
       case 'support':
-        return <SupportPage onBack={() => handleNavigate('home')} />;
+        return (
+          <SupportPage
+            onBack={() => handleNavigate('home')}
+            siteSettings={siteSettings}
+          />
+        );
       case 'resources':
-        return <ResourcesPage resources={resources} onBack={() => handleNavigate('home')} />;
+        return (
+          <ResourcesPage
+            resources={resources}
+            categories={categories}
+            onBack={() => handleNavigate('home')}
+          />
+        );
       case 'privacy':
         return <LegalPage type="privacy" onNavigate={handleNavigate} />;
       case 'terms':
@@ -215,28 +296,53 @@ export default function App() {
             psychiatrists={psychiatrists}
             resources={resources}
             team={team}
+            categories={categories}
+            siteSettings={siteSettings}
             setTherapists={setTherapists}
             setPsychiatrists={setPsychiatrists}
             setResources={setResources}
             setTeam={setTeam}
+            setCategories={setCategories}
+            setSiteSettings={setSiteSettings}
             session={session}
             onBack={() => handleNavigate('home')}
           />
         );
       default:
-        return <HomePage team={team} onNavigate={handleNavigate} />;
+        return (
+          <HomePage
+            team={team}
+            onNavigate={handleNavigate}
+            siteSettings={siteSettings}
+          />
+        );
     }
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white pb-24">
-      <Header currentView={view} onNavigate={handleNavigate} onAdminClick={() => handleNavigate('admin')} />
+    <div className="flex min-h-screen flex-col bg-[#F9F5EF]">
+      {/* Welcome Modal for first time visitors */}
+      {showWelcome && (
+        <WelcomeModal
+          text={siteSettings?.welcomeText}
+          onContinue={handleDismissWelcome}
+        />
+      )}
+
+      {/* Safety banner at the very top of the website, exactly as designed in Figma */}
+      <SafetyBanner siteSettings={siteSettings} />
+
+      {/* Header navigation bar directly below */}
+      <Header
+        currentView={view}
+        onNavigate={handleNavigate}
+        onAdminClick={() => handleNavigate('admin')}
+        siteSettings={siteSettings}
+      />
 
       <main className="flex-1">{renderPage()}</main>
 
       <Footer onNavigate={handleNavigate} />
-      <SafetyBanner />
     </div>
   );
 }
-

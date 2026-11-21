@@ -22,10 +22,18 @@ CREATE TABLE IF NOT EXISTS public.resources (
     title text NOT NULL,
     author text,
     note text,
-    category text NOT NULL, -- 'Books', 'Sermons', 'Music', etc.
+    category text NOT NULL, -- 'Books', 'Sermons', 'Music', 'Podcasts', 'Articles', or any custom category
     link_url text,
+    button_label text,
+    image_url text,
+    badge text,
     created_at timestamp with time zone DEFAULT timezone('utc'::text, now()) NOT NULL
 );
+
+-- Backward compatibility migration for existing resources table if created previously:
+ALTER TABLE public.resources ADD COLUMN IF NOT EXISTS button_label text;
+ALTER TABLE public.resources ADD COLUMN IF NOT EXISTS image_url text;
+ALTER TABLE public.resources ADD COLUMN IF NOT EXISTS badge text;
 
 -- 3. Create Team Members Table
 CREATE TABLE IF NOT EXISTS public.team_members (
